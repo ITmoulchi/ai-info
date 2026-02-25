@@ -1,0 +1,10 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+uploads/
+output/
+*.html
+!app/static/**/*.html
+!app/generator/templates/**/*.html

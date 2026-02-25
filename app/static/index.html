@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Générateur d'Infographies AI</title>
+  
+  <!-- Fonts Premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Animations & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      --secondary: #0f172a;
+      --accent: #38bdf8;
+      --surface: #1e293b;
+      --surface-hover: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+      --glow: 0 0 20px rgba(79, 70, 229, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0b0f19;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.15) 0%, transparent 40%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .main-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    /* Left Column: Hero */
+    .hero-content {
+      animation: fadeInLeft 0.8s ease-out;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 16px;
+      background: rgba(79, 70, 229, 0.1);
+      border: 1px solid rgba(79, 70, 229, 0.3);
+      border-radius: 50px;
+      color: #818cf8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .gradient-text {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+    }
+
+    .features {
+      display: flex;
+      gap: 2rem;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Right Column: Upload Card */
+    .card-wrapper {
+      position: relative;
+      animation: fadeInRight 0.8s ease-out 0.2s backwards;
+    }
+    
+    /* Glow effect behind card */
+    .card-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -20px; left: -20px; right: -20px; bottom: -20px;
+      background: var(--primary-gradient);
+      filter: blur(60px);
+      opacity: 0.2;
+      z-index: -1;
+      border-radius: 30px;
+    }
+
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+
+    .upload-area {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 3rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .upload-area:hover, .upload-area.dragover {
+      border-color: var(--primary);
+      background: rgba(79, 70, 229, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .upload-icon-svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1rem;
+      color: #e2e8f0;
+      filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
+      transition: transform 0.3s ease;
+    }
+    
+    .upload-area:hover .upload-icon-svg {
+      transform: scale(1.1) rotate(-5deg);
+      color: var(--accent);
+    }
+
+    .file-info {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .btn-generate {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-generate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5);
+    }
+    
+    .btn-generate:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .btn-loader {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      left: 50%; top: 50%;
+      margin-left: -10px; margin-top: -10px;
+    }
+
+    .loading .btn-text { opacity: 0; }
+    .loading .btn-loader { display: block; }
+
+    .result-actions {
+      display: none;
+      margin-top: 1.5rem;
+      gap: 1rem;
+    }
+    
+    .btn-outline {
+      flex: 1;
+      padding: 0.8rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: var(--text);
+      border-radius: 10px;
+      text-decoration: none;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: white;
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      text-align: center;
+      display: none;
+    }
+
+    /* Logos */
+    .brand-logos {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 2rem;
+      opacity: 0.5;
+      transition: opacity 0.3s;
+    }
+    .brand-logos:hover { opacity: 1; }
+    .brand-logos img { height: 30px; filter: grayscale(100%); transition: all 0.3s; }
+    .brand-logos img:hover { filter: none; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 900px) {
+      .main-wrapper { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+      .hero-desc { margin: 0 auto 2.5rem; }
+      .features { justify-content: center; }
+      .brand-logos { position: relative; bottom: auto; left: auto; transform: none; margin-top: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-wrapper">
+    <!-- Left: Hero -->
+    <div class="hero-content">
+      <div class="badge">✨ Nouvelle Version 2.0</div>
+      <h1>Transformez vos documents en <br><span class="gradient-text">Infographies Virales</span></h1>
+      <p class="hero-desc">
+        Notre IA analyse vos fichiers PDF, Word et PowerPoint pour extraire les idées clés et générer automatiquement des visuels professionnels en quelques secondes.
+      </p>
+      
+      <div class="features">
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <span>Analyse intelligente</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <span>Design Premium</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <span>Export HTML/PDF</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Action -->
+    <div class="card-wrapper">
+      <div class="glass-card">
+        <form id="form" action="/generate" method="post" enctype="multipart/form-data">
+          
+          <label class="upload-area" id="drop-zone">
+            <input type="file" id="file-input" name="file" accept=".pdf,.docx,.doc,.pptx,.ppt,.txt,.md" required hidden>
+            <!-- Icône SVG propre et centrée -->
+            <svg class="upload-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 style="margin-bottom: 0.5rem; font-weight: 600;">Glissez votre fichier ici</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">ou cliquez pour parcourir</p>
+            <div class="file-info" id="file-name">Formats : PDF, DOCX, PPTX</div>
+          </label>
+
+          <button type="submit" class="btn-generate" id="submit-btn">
+            <span class="btn-text">Générer l'Infographie 🚀</span>
+            <div class="btn-loader"></div>
+          </button>
+          
+          <div class="error-msg" id="error-msg"></div>
+
+          <div class="result-actions" id="result-actions">
+            <a href="#" target="_blank" class="btn-outline" id="preview-btn">👁️ Voir</a>
+            <a href="#" target="_blank" class="btn-outline" id="download-pdf-btn">📄 PDF</a>
+            <a href="#" target="_blank" class="btn-outline" id="download-html-btn">🌐 HTML</a>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-logos">
+    <img src="/images/6.png" alt="Logo">
+    <img src="/images/7.png" alt="Logo">
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    const fileInput = document.getElementById('file-input');
+    const dropZone = document.getElementById('drop-zone');
+    const fileNameDisplay = document.getElementById('file-name');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorMsg = document.getElementById('error-msg');
+    const resultActions = document.getElementById('result-actions');
+    const previewBtn = document.getElementById('preview-btn');
+    const downloadPdfBtn = document.getElementById('download-pdf-btn');
+    const downloadHtmlBtn = document.getElementById('download-html-btn');
+
+    // Drag & Drop effects
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+    function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+    
+    ['dragenter', 'dragover'].forEach(() => dropZone.classList.add('dragover'));
+    ['dragleave', 'drop'].forEach(() => dropZone.classList.remove('dragover'));
+
+    dropZone.addEventListener('drop', handleDrop, false);
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      if(files.length) {
+        fileInput.files = files;
+        updateFileName(files[0].name);
+      }
+    }
+
+    fileInput.addEventListener('change', function() {
+      if(this.files.length) updateFileName(this.files[0].name);
+    });
+
+    function updateFileName(name) {
+      fileNameDisplay.textContent = "Fichier sélectionné : " + name;
+      fileNameDisplay.style.color = "#38bdf8";
+      fileNameDisplay.style.fontWeight = "600";
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if(!fileInput.files.length) return;
+
+      // Reset state
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+      errorMsg.style.display = 'none';
+      resultActions.style.display = 'none';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch('/generate', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) throw new Error(data.detail || 'Erreur lors de la génération');
+
+        // Success
+        previewBtn.href = data.preview_url;
+        // Le bouton HTML télécharge le fichier HTML brut
+        downloadHtmlBtn.href = "/download/" + data.id;
+        
+        // Le bouton PDF pointe vers la génération serveur (WeasyPrint)
+        // OU on pourrait ouvrir une page spéciale qui lance window.print()
+        downloadPdfBtn.href = "/download-pdf/" + data.id;
+
+        resultActions.style.display = 'flex';
+        submitBtn.querySelector('.btn-text').textContent = "Généré avec succès ! 🎉";
+        
+      } catch (err) {
+        console.error(err);
+        errorMsg.textContent = "Oups : " + err.message;
+        errorMsg.style.display = 'block';
+        submitBtn.querySelector('.btn-text').textContent = "Réessayer";
+      } finally {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
