@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+HEAD
 venv/
 .venv/
 __pycache__/
@@ -9,7 +9,7 @@ output/
 *.html
 !app/static/**/*.html
 !app/generator/templates/**/*.html
-=======
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -217,4 +217,4 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
->>>>>>> ad50a5d67acb8bd6d454dd3b0f06f862f27c2f47
+ad50a5d67acb8bd6d454dd3b0f06f862f27c2f47
