@@ -2,6 +2,26 @@
 
 Génération automatique d'**infographies professionnelles** à partir d'un document (PDF, Word, PowerPoint ou texte). La plateforme analyse le contenu, extrait les idées clés, les chiffres importants et la structure, puis produit une infographie avec graphiques, chronologie et mise en page harmonieuse.
 
+## 🐳 Lancement avec Docker (recommandé)
+
+> La méthode la plus simple — aucune installation Python requise.
+
+### Prérequis
+- Installer **Docker Desktop** : https://www.docker.com/products/docker-desktop/
+
+### Démarrage
+```bash
+# 1. Cloner ou dézipper le projet, puis dans le dossier :
+docker compose up --build
+
+# 2. Ouvrir dans le navigateur :
+# http://localhost:8000
+```
+
+Pour arrêter : `Ctrl+C` puis `docker compose down`
+
+---
+
 ## Fonctionnalités
 
 - **Formats supportés** : PDF, Word (.docx), PowerPoint (.pptx), fichier texte (.txt, .md)

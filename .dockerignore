@@ -1,0 +1,26 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Environnement
+.env
+
+# Données locales
+uploads/
+output/
+
+# Git
+.git/
+.gitignore
+
+# Divers
+*.png
+*.jpg
+*.jpeg
+*.pdf
+README.md

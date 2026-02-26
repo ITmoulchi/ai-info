@@ -10,8 +10,6 @@ python-pptx==0.6.23
 
 # Analyse de contenu (optionnel: OpenAI pour meilleure extraction)
 openai==1.12.0
-spacy==3.7.2  # NLP local performant
-# Modèle fr_core_news_sm à télécharger via: python -m spacy download fr_core_news_sm
 
 # Génération visuelle (Pillow >=10.2 pour éviter erreur de build sur Windows)
 Pillow>=10.2.0,<11
